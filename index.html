@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>우리 결혼합니다</title>
     
-    <!-- 카카오톡 공유 썸네일 제목: 하트(♥)로 변경 -->
     <meta property="og:title" content="동재 ♥ 혜령 결혼합니다">
     <meta property="og:description" content="2027년 12월 5일 일요일 낮 2시 40분">
     <meta property="og:image" content="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
@@ -240,4 +239,378 @@
     <section class="gallery fade-wrap" id="gallerySection">
         <h2 class="section-title">우리의 순간들</h2>
         <p class="section-subtitle">GALLERY</p>
-        <div class="gallery
+        <div class="gallery-grid" id="galleryGrid"></div>
+        <button id="btnMore" class="btn-more" onclick="togglePhotos()">사진 더보기</button>
+    </section>
+
+    <section class="calendar-section fade-wrap">
+        <h2 class="section-title">행복이 시작되는 날</h2>
+        <p class="section-subtitle">WEDDING DAY</p>
+        <p class="calendar-header">2027년 12월 5일 일요일</p>
+        
+        <table class="calendar-table">
+            <thead>
+                <tr>
+                    <th class="sun">일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="sun"></td><td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td>
+                </tr>
+                <tr>
+                    <td class="sun"><span class="highlight">5</span></td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td>
+                </tr>
+                <tr>
+                    <td class="sun">12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td>
+                </tr>
+                <tr>
+                    <td class="sun">19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td>
+                </tr>
+                <tr>
+                    <td class="sun">26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="d-day-container">
+            <p class="d-day-text">동재, 혜령의 결혼식이</p>
+            <span class="d-day-highlight" id="ddayCount">00일 00시간 00분 00초</span>
+            <p class="d-day-text">남았습니다.</p>
+        </div>
+    </section>
+
+    <section class="location fade-wrap">
+        <h2 class="section-title">오시는 길</h2>
+        <p class="section-subtitle">LOCATION</p>
+        <div class="venue-info">
+            <p class="venue-name">상록아트홀</p>
+            <p class="venue-address">서울특별시 강남구 언주로 508 (선릉역 5번 출구)</p>
+            <button class="btn-copy-address" onclick="copyAddress()">주소 복사</button>
+        </div>
+        <div class="map-wrapper">
+            <iframe src="https://maps.google.com/maps?q=서울특별시%20강남구%20언주로%20508%20상록아트홀&t=&z=16&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        <div class="map-buttons">
+            <a href="https://map.kakao.com/link/to/상록아트홀,37.503939,127.042813" target="_blank" class="btn-map">카카오맵</a>
+            <a href="https://map.naver.com/v5/search/상록아트홀" target="_blank" class="btn-map">네이버지도</a>
+        </div>
+    </section>
+
+    <section class="account-section fade-wrap">
+        <h2 class="section-title">마음 전하실 곳</h2>
+        <p class="section-subtitle">ACCOUNT</p>
+        <p class="account-desc">참석이 어려우신 분들을 위해<br>마음 전할 곳을 기재하였습니다.<br>너른 양해 부탁드립니다.</p>
+
+        <div class="accordion-wrapper">
+            <div class="accordion">
+                <button class="accordion-btn" onclick="toggleAccordion('groomAccount')">
+                    신랑측 계좌번호 <span>▾</span>
+                </button>
+                <div class="accordion-content" id="groomAccount">
+                    <div class="account-item">
+                        <div class="account-info">
+                            <span class="bank-details">OO은행 123-456-789012</span>
+                            <span class="account-holder">예금주: 신랑 아버지 (혼주)</span>
+                        </div>
+                        <button class="btn-copy-acc" onclick="copyAccount('123456789012')">복사</button>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-info">
+                            <span class="bank-details">OO은행 098-765-432109</span>
+                            <span class="account-holder">예금주: 신랑 어머니 (혼주)</span>
+                        </div>
+                        <button class="btn-copy-acc" onclick="copyAccount('098765432109')">복사</button>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-info">
+                            <span class="bank-details">OO은행 111-222-333444</span>
+                            <span class="account-holder">예금주: 조동재 (신랑)</span>
+                        </div>
+                        <button class="btn-copy-acc" onclick="copyAccount('111222333444')">복사</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <button class="accordion-btn" onclick="toggleAccordion('brideAccount')">
+                    신부측 계좌번호 <span>▾</span>
+                </button>
+                <div class="accordion-content" id="brideAccount">
+                    <div class="account-item">
+                        <div class="account-info">
+                            <span class="bank-details">OO은행 222-333-444555</span>
+                            <span class="account-holder">예금주: 신부 아버지 (혼주)</span>
+                        </div>
+                        <button class="btn-copy-acc" onclick="copyAccount('222333444555')">복사</button>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-info">
+                            <span class="bank-details">OO은행 333-444-555666</span>
+                            <span class="account-holder">예금주: 신부 어머니 (혼주)</span>
+                        </div>
+                        <button class="btn-copy-acc" onclick="copyAccount('333444555666')">복사</button>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-info">
+                            <span class="bank-details">OO은행 555-666-777888</span>
+                            <span class="account-holder">예금주: 김혜령 (신부)</span>
+                        </div>
+                        <button class="btn-copy-acc" onclick="copyAccount('555666777888')">복사</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 방명록 섹션 -->
+    <section class="guestbook-section fade-wrap">
+        <h2 class="section-title">축하 메시지</h2>
+        <p class="section-subtitle">GUESTBOOK</p>
+        
+        <div class="guestbook-form">
+            <div class="input-group">
+                <input type="text" id="guestName" placeholder="이름" maxlength="10">
+                <input type="password" id="guestPwd" placeholder="비밀번호" maxlength="10">
+            </div>
+            <textarea id="guestMsg" rows="3" placeholder="축하 메시지를 남겨주세요." maxlength="200"></textarea>
+            <button class="btn-submit" onclick="submitMessage()">등록하기</button>
+        </div>
+
+        <div class="guestbook-list" id="guestbookList">
+            <!-- 자바스크립트를 통해 메시지가 이곳에 추가됩니다 -->
+        </div>
+    </section>
+</div>
+
+<!-- 사진 확대 모달 -->
+<div id="photoModal" class="modal">
+    <span class="modal-close" onclick="closeModal()">&times;</span>
+    <span class="modal-prev" onclick="changeSlide(-1)">&#10094;</span>
+    <img class="modal-content" id="modalImage">
+    <span class="modal-next" onclick="changeSlide(1)">&#10095;</span>
+</div>
+
+<script>
+    // --- 스크롤 등장 애니메이션 반복 적용 로직 ---
+    const fadeElements = document.querySelectorAll('.fade-wrap');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            } else {
+                entry.target.classList.remove('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    fadeElements.forEach(el => observer.observe(el));
+
+    // --- 아코디언 토글 기능 (계좌번호 열고 닫기) ---
+    function toggleAccordion(id) {
+        const content = document.getElementById(id);
+        content.classList.toggle('show');
+    }
+
+    // --- 계좌번호 복사 기능 ---
+    function copyAccount(accNumber) {
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(accNumber).then(() => {
+                alert("계좌번호가 복사되었습니다.");
+            });
+        } else {
+            const textArea = document.createElement("textarea");
+            textArea.value = accNumber;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert("계좌번호가 복사되었습니다.");
+            } catch (err) {
+                alert("복사에 실패했습니다. 직접 복사해주세요.");
+            }
+            document.body.removeChild(textArea);
+        }
+    }
+
+    // --- D-Day 실시간 시계 계산 로직 ---
+    function updateDday() {
+        const weddingDate = new Date(2027, 11, 5, 14, 40, 0).getTime(); 
+        const now = new Date().getTime();
+        const distance = weddingDate - now;
+        const ddayElement = document.getElementById("ddayCount");
+
+        if (distance < 0) {
+            document.querySelector(".d-day-container").innerHTML = "<p class='d-day-text'>동재, 혜령의 결혼식이 <span class='d-day-highlight'>오늘</span>입니다.</p>";
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        ddayElement.innerHTML = days + "일 " + hours + "시간 " + minutes + "분 " + seconds + "초";
+    }
+    
+    updateDday();
+    setInterval(updateDday, 1000); 
+
+    // --- 방명록 (Guestbook) 로직 (카카오톡 에러 방지 처리 완료) ---
+    let messages = [];
+    try {
+        messages = JSON.parse(localStorage.getItem('wedding_guestbook')) || [];
+    } catch (e) {
+        console.warn("카카오톡 브라우저 보안 환경 - 로컬스토리지 접근 제한됨");
+    }
+
+    function renderMessages() {
+        const list = document.getElementById('guestbookList');
+        if (!list) return;
+        list.innerHTML = '';
+        
+        messages.forEach((msg, index) => {
+            const div = document.createElement('div');
+            div.className = 'guest-msg-item';
+            div.innerHTML = `
+                <button class="btn-delete" onclick="deleteMessage(${index})">×</button>
+                <div class="guest-msg-header">
+                    <span class="guest-name">${msg.name}</span>
+                    <span class="guest-date">${msg.date}</span>
+                </div>
+                <div class="guest-text">${msg.text}</div>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    function submitMessage() {
+        const nameInput = document.getElementById('guestName');
+        const pwdInput = document.getElementById('guestPwd');
+        const msgInput = document.getElementById('guestMsg');
+
+        const name = nameInput.value.trim();
+        const pwd = pwdInput.value.trim();
+        const text = msgInput.value.trim();
+
+        if(!name) return alert('이름을 입력해주세요.');
+        if(!pwd) return alert('비밀번호를 입력해주세요.');
+        if(!text) return alert('메시지를 입력해주세요.');
+
+        const today = new Date();
+        const dateString = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
+
+        messages.unshift({ name, pwd, text, date: dateString });
+        
+        try {
+            localStorage.setItem('wedding_guestbook', JSON.stringify(messages));
+            alert('메시지가 등록되었습니다.');
+        } catch (e) {
+            alert('카카오톡 내장 브라우저에서는 방명록 등록이 제한될 수 있습니다. 우측 하단 [다른 브라우저로 열기(Safari, 크롬 등)]를 이용해주세요.');
+        }
+        
+        nameInput.value = '';
+        pwdInput.value = '';
+        msgInput.value = '';
+        
+        renderMessages();
+    }
+
+    function deleteMessage(index) {
+        const inputPwd = prompt('작성 시 입력한 비밀번호를 입력해주세요.');
+        if (inputPwd === null) return; 
+
+        if (inputPwd === messages[index].pwd) {
+            messages.splice(index, 1);
+            try {
+                localStorage.setItem('wedding_guestbook', JSON.stringify(messages));
+            } catch (e) {}
+            renderMessages();
+            alert('삭제되었습니다.');
+        } else {
+            alert('비밀번호가 일치하지 않습니다.');
+        }
+    }
+
+    renderMessages();
+
+
+    // --- 갤러리 로직 ---
+    const images = [
+        "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1607190072270-128d51f6c382?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1544078751-58fee2d8a03b?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1581298835825-78e789bcfa3a?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1509927083803-4bd519298ac4?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1621535492980-2a818c2134ef?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1454359676602-e2d93e10bdbe?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=600&q=80"
+    ];
+
+    const galleryGrid = document.getElementById('galleryGrid');
+    const modal = document.getElementById('photoModal');
+    const modalImage = document.getElementById('modalImage');
+    const btnMore = document.getElementById('btnMore');
+    let currentIndex = 0;
+    let isExpanded = false; 
+
+    images.forEach((src, index) => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.className = 'gallery-item';
+        if (index >= 6) img.classList.add('hidden-item');
+        img.onclick = () => openModal(index);
+        galleryGrid.appendChild(img);
+    });
+
+    function togglePhotos() {
+        const allItems = document.querySelectorAll('.gallery-item');
+        if (!isExpanded) {
+            allItems.forEach((item, index) => { if (index >= 6) item.classList.remove('hidden-item'); });
+            btnMore.innerHTML = '사진 접기';
+            isExpanded = true;
+        } else {
+            allItems.forEach((item, index) => { if (index >= 6) item.classList.add('hidden-item'); });
+            btnMore.innerHTML = '사진 더보기';
+            isExpanded = false;
+            document.getElementById('gallerySection').scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    function openModal(index) {
+        currentIndex = index;
+        modalImage.src = images[currentIndex];
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; 
+    }
+
+    function closeModal() {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto'; 
+    }
+
+    function changeSlide(direction) {
+        currentIndex = (currentIndex + direction + images.length) % images.length;
+        modalImage.src = images[currentIndex];
+    }
+
+    let touchstartX = 0;
+    let touchendX = 0;
+
+    modal.addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; });
+    modal.addEventListener('touchend', e => {
+        touchendX = e.changedTouches[0].screenX;
+        if (touchendX < touchstartX - 40) changeSlide(1);  
+        if (touchendX > touchstartX + 40) changeSlide(-1); 
+    });
+</script>
+
+</body>
+</html>
