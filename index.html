@@ -10,14 +10,14 @@
     <meta property="og:image" content="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
     <meta property="og:url" content="https://jo-dongjae.github.io/wedding/">
 
-    <!-- 격식있는 명조체 폰트 불러오기 -->
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+    <!-- 기존 명조체와 메인 커버용 부드러운 폰트(고운바탕) 함께 불러오기 -->
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         
-        /* 배경 분위기 수정: 차분하고 고급스러운 뮤트톤 */
+        /* 배경 분위기: 차분하고 고급스러운 뮤트톤 */
         body { 
             background-color: #dfdbd4; 
             font-family: 'Nanum Myeongjo', serif; 
@@ -47,24 +47,40 @@
             background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
             background-size: cover; background-position: center; display: flex; flex-direction: column; color: #ffffff;
         }
+        
+        /* 사진 위를 살짝 어둡게 덮어주는 레이어 */
         .main-cover::before { 
             content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; 
-            background: linear-gradient(to bottom, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.85) 100%); z-index: 1; 
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.6) 100%); z-index: 1; 
         }
         
-        .cover-text-bottom {
-            position: absolute; bottom: 12%; left: 0; width: 100%; z-index: 2;
-            text-align: center; letter-spacing: 2px;
+        /* 사진과 아래 배경을 자연스럽게 이어주는 그라데이션 (더 길고 부드럽게 다단계 적용) */
+        .main-cover::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 250px;
+            background: linear-gradient(to bottom, 
+                rgba(244,243,240,0) 0%, 
+                rgba(244,243,240,0.4) 45%, 
+                rgba(244,243,240,0.8) 80%, 
+                #f4f3f0 100%);
+            z-index: 2;
         }
-        .cover-names { font-size: 2.2rem; font-weight: 700; margin-bottom: 15px; text-shadow: 1px 1px 4px rgba(0,0,0,0.3); }
-        .cover-date { font-size: 1rem; font-weight: 400; letter-spacing: 4px; opacity: 0.9; text-shadow: 1px 1px 4px rgba(0,0,0,0.3); }
+        
+        /* 메인 커버 글씨 설정 */
+        .cover-text-bottom {
+            position: absolute; bottom: 7%;
+            left: 0; width: 100%; z-index: 3;
+            text-align: center; letter-spacing: 2px;
+            font-family: 'Gowun Batang', serif;
+        }
+        .cover-names { font-size: 1.8rem; font-weight: 700; margin-bottom: 12px; text-shadow: 1px 1px 4px rgba(0,0,0,0.1); }
+        .cover-date { font-size: 0.9rem; font-weight: 400; letter-spacing: 3px; opacity: 0.85; text-shadow: 1px 1px 4px rgba(0,0,0,0.1); }
 
         /* 2. 공통 섹션 타이틀 */
         .section-title { font-size: 1.3rem; color: #2a2a2a; font-weight: 700; text-align: center; letter-spacing: 3px; }
         .section-subtitle { font-size: 0.8rem; color: #888; text-align: center; letter-spacing: 4px; margin-bottom: 30px; text-transform: uppercase; }
 
         /* 3. 인사말 */
-        .greeting { text-align: center; padding: 80px 20px; background-color: transparent; }
+        .greeting { text-align: center; padding: 20px 20px 80px; background-color: transparent; position: relative; z-index: 3; }
         .greeting-divider { width: 1px; height: 40px; background-color: #b89c7d; margin: 0 auto 25px; }
         .greeting-text { font-size: 1rem; color: #3a3a3a; line-height: 2.2; margin-top: 30px; }
         .parents-divider { width: 40px; height: 1px; background-color: #b89c7d; margin: 45px auto 40px; }
@@ -201,7 +217,6 @@
 <div class="mobile-container">
     <section class="main-cover">
         <div class="cover-text-bottom">
-            <!-- 접속 후 보이는 메인 글씨는 그대로 & 사용 -->
             <h1 class="cover-names">동재 & 혜령</h1>
             <p class="cover-date">2027. 12. 05. SUN 2:40 PM</p>
         </div>
@@ -363,7 +378,6 @@
         </div>
     </section>
 
-    <!-- 방명록 섹션 -->
     <section class="guestbook-section fade-wrap">
         <h2 class="section-title">축하 메시지</h2>
         <p class="section-subtitle">GUESTBOOK</p>
@@ -378,12 +392,10 @@
         </div>
 
         <div class="guestbook-list" id="guestbookList">
-            <!-- 자바스크립트를 통해 메시지가 이곳에 추가됩니다 -->
         </div>
     </section>
 </div>
 
-<!-- 사진 확대 모달 -->
 <div id="photoModal" class="modal">
     <span class="modal-close" onclick="closeModal()">&times;</span>
     <span class="modal-prev" onclick="changeSlide(-1)">&#10094;</span>
@@ -456,7 +468,7 @@
     updateDday();
     setInterval(updateDday, 1000); 
 
-    // --- 방명록 (Guestbook) 로직 (카카오톡 에러 방지 처리 완료) ---
+    // --- 방명록 (Guestbook) 로직 ---
     let messages = [];
     try {
         messages = JSON.parse(localStorage.getItem('wedding_guestbook')) || [];
@@ -533,7 +545,6 @@
     }
 
     renderMessages();
-
 
     // --- 갤러리 로직 ---
     const images = [
