@@ -48,13 +48,11 @@
             background-size: cover; background-position: center; display: flex; flex-direction: column; color: #ffffff;
         }
         
-        /* 사진 위를 살짝 어둡게 덮어주는 레이어 */
         .main-cover::before { 
             content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; 
             background: linear-gradient(to bottom, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.6) 100%); z-index: 1; 
         }
         
-        /* 사진과 아래 배경을 자연스럽게 이어주는 그라데이션 (더 길고 부드럽게 다단계 적용) */
         .main-cover::after {
             content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 250px;
             background: linear-gradient(to bottom, 
@@ -65,7 +63,6 @@
             z-index: 2;
         }
         
-        /* 메인 커버 글씨 설정 */
         .cover-text-bottom {
             position: absolute; bottom: 7%;
             left: 0; width: 100%; z-index: 3;
@@ -75,9 +72,26 @@
         .cover-names { font-size: 1.8rem; font-weight: 700; margin-bottom: 12px; text-shadow: 1px 1px 4px rgba(0,0,0,0.1); }
         .cover-date { font-size: 0.9rem; font-weight: 400; letter-spacing: 3px; opacity: 0.85; text-shadow: 1px 1px 4px rgba(0,0,0,0.1); }
 
-        /* 2. 공통 섹션 타이틀 */
+        /* 2. 공통 섹션 타이틀 & 아이콘 애니메이션 */
         .section-title { font-size: 1.3rem; color: #2a2a2a; font-weight: 700; text-align: center; letter-spacing: 3px; }
-        .section-subtitle { font-size: 0.8rem; color: #888; text-align: center; letter-spacing: 4px; margin-bottom: 30px; text-transform: uppercase; }
+        .section-subtitle { 
+            font-size: 0.8rem; color: #888; text-align: center; letter-spacing: 4px; 
+            margin-bottom: 30px; text-transform: uppercase;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+
+        /* 서브타이틀 아이콘 및 펄스 애니메이션 */
+        .sub-icon {
+            width: 14px; height: 14px; stroke: #b89c7d; fill: none; stroke-width: 1.8;
+            stroke-linecap: round; stroke-linejoin: round;
+            animation: iconPulse 2.5s infinite ease-in-out;
+            display: inline-block; vertical-align: middle;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
 
         /* 3. 인사말 */
         .greeting { text-align: center; padding: 20px 20px 80px; background-color: transparent; position: relative; z-index: 3; }
@@ -225,7 +239,11 @@
     <section class="greeting fade-wrap">
         <div class="greeting-divider"></div>
         <h2 class="section-title">초대합니다</h2>
-        <p class="section-subtitle">INVITATION</p>
+        <p class="section-subtitle">
+            <svg class="sub-icon" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/></svg>
+            INVITATION
+            <svg class="sub-icon" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/></svg>
+        </p>
         <p class="greeting-text">
             서로가 마주 보며 다져온 사랑을<br>
             이제 함께 한 곳을 바라보며 걸어갈 수 있는<br>
@@ -253,14 +271,22 @@
 
     <section class="gallery fade-wrap" id="gallerySection">
         <h2 class="section-title">우리의 순간들</h2>
-        <p class="section-subtitle">GALLERY</p>
+        <p class="section-subtitle">
+            <svg class="sub-icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            GALLERY
+        </p>
         <div class="gallery-grid" id="galleryGrid"></div>
         <button id="btnMore" class="btn-more" onclick="togglePhotos()">사진 더보기</button>
     </section>
 
     <section class="calendar-section fade-wrap">
         <h2 class="section-title">행복이 시작되는 날</h2>
-        <p class="section-subtitle">WEDDING DAY</p>
+        <p class="section-subtitle">
+            <!-- WEDDING DAY 양쪽으로 배치된 하트 아이콘 -->
+            <svg class="sub-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.72-8.72 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            WEDDING DAY
+            <svg class="sub-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.72-8.72 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </p>
         <p class="calendar-header">2027년 12월 5일 일요일</p>
         
         <table class="calendar-table">
@@ -297,7 +323,10 @@
 
     <section class="location fade-wrap">
         <h2 class="section-title">오시는 길</h2>
-        <p class="section-subtitle">LOCATION</p>
+        <p class="section-subtitle">
+            <svg class="sub-icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            LOCATION
+        </p>
         <div class="venue-info">
             <p class="venue-name">상록아트홀</p>
             <p class="venue-address">서울특별시 강남구 언주로 508 (선릉역 5번 출구)</p>
@@ -314,7 +343,10 @@
 
     <section class="account-section fade-wrap">
         <h2 class="section-title">마음 전하실 곳</h2>
-        <p class="section-subtitle">ACCOUNT</p>
+        <p class="section-subtitle">
+            <svg class="sub-icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            ACCOUNT
+        </p>
         <p class="account-desc">참석이 어려우신 분들을 위해<br>마음 전할 곳을 기재하였습니다.<br>너른 양해 부탁드립니다.</p>
 
         <div class="accordion-wrapper">
@@ -380,7 +412,10 @@
 
     <section class="guestbook-section fade-wrap">
         <h2 class="section-title">축하 메시지</h2>
-        <p class="section-subtitle">GUESTBOOK</p>
+        <p class="section-subtitle">
+            <svg class="sub-icon" viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L3 13.05V18h4.95l12.29-12.29z"/><line x1="16" y1="8" x2="20" y2="12"/></svg>
+            GUESTBOOK
+        </p>
         
         <div class="guestbook-form">
             <div class="input-group">
