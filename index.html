@@ -22,6 +22,43 @@
             font-family: 'Nanum Myeongjo', serif; 
             color: #333; line-height: 1.8; overflow-x: hidden; 
         }
+
+        /* --- 1. 봉투 열기 애니메이션 --- */
+        #envelopeOverlay {
+            position: fixed; inset: 0; background-color: #dfdbd4;
+            z-index: 99999; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+        .env-wrapper {
+            position: relative; width: 300px; height: 200px; cursor: pointer; perspective: 1000px;
+        }
+        .env-back { position: absolute; inset: 0; background: #c5b4a4; border-radius: 4px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .env-letter {
+            position: absolute; left: 10px; right: 10px; bottom: 10px; height: 180px;
+            background: #fff; transition: transform 1s ease 0.4s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); font-family: 'Gowun Batang', serif;
+        }
+        .env-letter h3 { font-size: 1.5rem; color: #7a6a57; margin-bottom: 5px; font-weight: 700; }
+        .env-letter p { font-size: 1rem; color: #999; }
+        .env-front {
+            position: absolute; inset: 0; background: #dcd0c0;
+            clip-path: polygon(0 0, 0 100%, 100% 100%, 100% 0, 50% 40%); border-radius: 4px;
+        }
+        .env-flap {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #e3d5c8; clip-path: polygon(0 0, 100% 0, 50% 55%);
+            transform-origin: top; transition: transform 0.6s ease;
+            border-radius: 4px 4px 0 0; z-index: 2;
+        }
+        .env-wrapper.open .env-flap { transform: rotateX(180deg); z-index: 0; }
+        .env-wrapper.open .env-letter { transform: translateY(-80px); z-index: 1; }
+        .env-guide {
+            margin-top: 50px; font-size: 1.1rem; color: #7a6a57;
+            font-weight: 700; animation: pulseEnv 1.5s infinite; cursor: pointer;
+        }
+        @keyframes pulseEnv { 0%, 100% { opacity: 0.6; transform: translateY(0); } 50% { opacity: 1; transform: translateY(5px); } }
         
         .mobile-container { 
             max-width: 480px; margin: 0 auto; 
@@ -31,15 +68,8 @@
         }
         
         /* 스크롤 애니메이션 */
-        .fade-wrap {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        .fade-wrap.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .fade-wrap { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .fade-wrap.visible { opacity: 1; transform: translateY(0); }
 
         /* BGM 컨트롤러 */
         .bgm-btn {
@@ -47,36 +77,28 @@
             width: 40px; height: 40px; border-radius: 50%;
             background: rgba(255, 255, 255, 0.8); border: 1px solid #b89c7d;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            transition: all 0.3s;
+            cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: all 0.3s;
         }
         .bgm-btn svg { width: 20px; height: 20px; fill: #7a6a57; }
         .bgm-btn.playing svg { animation: rotateDisc 4s linear infinite; }
         @keyframes rotateDisc { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* 1. 메인 커버 */
+        /* 메인 커버 */
         .main-cover {
             position: relative; height: 100vh; height: 100dvh; text-align: center;
             background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
             background-size: cover; background-position: center; display: flex; flex-direction: column; color: #ffffff;
         }
-        .main-cover::before { 
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; 
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.6) 100%); z-index: 1; 
-        }
+        .main-cover::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.6) 100%); z-index: 1; }
         .main-cover::after {
             content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 250px;
-            background: linear-gradient(to bottom, rgba(244,243,240,0) 0%, rgba(244,243,240,0.4) 45%, rgba(244,243,240,0.8) 80%, #f4f3f0 100%);
-            z-index: 2;
+            background: linear-gradient(to bottom, rgba(244,243,240,0) 0%, rgba(244,243,240,0.4) 45%, rgba(244,243,240,0.8) 80%, #f4f3f0 100%); z-index: 2;
         }
-        .cover-text-bottom {
-            position: absolute; bottom: 7%; left: 0; width: 100%; z-index: 3;
-            text-align: center; letter-spacing: 2px; font-family: 'Gowun Batang', serif;
-        }
+        .cover-text-bottom { position: absolute; bottom: 7%; left: 0; width: 100%; z-index: 3; text-align: center; letter-spacing: 2px; font-family: 'Gowun Batang', serif; }
         .cover-names { font-size: 1.8rem; font-weight: 700; margin-bottom: 12px; text-shadow: 1px 1px 4px rgba(0,0,0,0.1); }
         .cover-date { font-size: 0.9rem; font-weight: 400; letter-spacing: 3px; opacity: 0.85; text-shadow: 1px 1px 4px rgba(0,0,0,0.1); }
 
-        /* 2. 공통 타이틀 */
+        /* 공통 타이틀 */
         .section-title { font-size: 1.3rem; color: #2a2a2a; font-weight: 700; text-align: center; letter-spacing: 3px; }
         .section-subtitle { 
             font-size: 0.8rem; color: #888; text-align: center; letter-spacing: 4px; 
@@ -89,7 +111,7 @@
         }
         @keyframes iconPulse { 0%, 100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.2); opacity: 1; } }
 
-        /* 3. 인사말 및 연락하기 */
+        /* 인사말 */
         .greeting { text-align: center; padding: 20px 20px 80px; position: relative; z-index: 3; }
         .greeting-divider { width: 1px; height: 40px; background-color: #b89c7d; margin: 0 auto 25px; }
         .greeting-text { font-size: 1rem; color: #3a3a3a; line-height: 2.2; margin-top: 30px; }
@@ -97,124 +119,80 @@
         .parents-info { font-size: 1.15rem; color: #222; font-weight: 700; }
         .parent-row { display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 12px; }
         .relation { font-size: 0.95rem; color: #777; font-weight: 400; margin: 0 5px; }
-        
         .btn-contact {
-            margin-top: 35px; padding: 12px 28px; background-color: #fbfbfb;
-            border: 1px solid #b89c7d; color: #7a6a57; font-size: 0.9rem;
-            font-family: inherit; border-radius: 25px; cursor: pointer; transition: all 0.2s;
-            display: inline-flex; align-items: center; gap: 8px;
+            margin-top: 35px; padding: 12px 28px; background-color: #fbfbfb; border: 1px solid #b89c7d; color: #7a6a57; font-size: 0.9rem;
+            font-family: inherit; border-radius: 25px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
         }
         .btn-contact:active { background-color: #b89c7d; color: #fff; }
 
-        /* 4. 갤러리 */
+        /* --- 2. 가로 스와이프 갤러리 --- */
         .gallery { padding: 80px 20px; background-color: #ebe9e4; } 
-        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 20px; }
-        .gallery-item { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; cursor: pointer; filter: grayscale(10%) contrast(95%); }
-        .hidden-item { display: none; }
-        .btn-more {
-            display: block; width: 100%; padding: 14px; margin-top: 20px;
-            background-color: transparent; border: 1px solid #bba68d; color: #7a6a57;
-            font-size: 0.9rem; font-family: inherit; cursor: pointer; letter-spacing: 1px;
+        .gallery-wrapper {
+            display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+            scroll-behavior: smooth; gap: 15px; padding: 10px 0 30px;
+            -ms-overflow-style: none; scrollbar-width: none; margin-top: 20px;
+        }
+        .gallery-wrapper::-webkit-scrollbar { display: none; }
+        .gallery-item {
+            flex: 0 0 80%; aspect-ratio: 4/5; object-fit: cover; border-radius: 8px;
+            scroll-snap-align: center; box-shadow: 0 6px 15px rgba(0,0,0,0.1); cursor: pointer; filter: grayscale(10%) contrast(95%);
         }
 
-        /* 5. 달력 및 D-Day */
+        /* 달력 및 D-Day */
         .calendar-section { padding: 80px 20px; text-align: center; }
         .calendar-header { font-size: 1.05rem; color: #333; margin-bottom: 30px; letter-spacing: 1px; font-weight: 700; line-height: 1.6; }
-        .calendar-time { 
-            font-size: 1.3rem; 
-            font-weight: 700; 
-            color: #8b6e4e; 
-            letter-spacing: 2px; 
-            margin-top: 8px; 
-            display: block; 
-        }
-
+        .calendar-time { font-size: 1.3rem; font-weight: 700; color: #8b6e4e; letter-spacing: 2px; margin-top: 8px; display: block; }
         .calendar-table { width: 100%; max-width: 300px; margin: 0 auto; border-collapse: collapse; text-align: center; }
         .calendar-table th { padding: 10px; font-weight: 400; color: #888; font-size: 0.85rem; border-bottom: 1px solid #dddcd8; }
         .calendar-table td { padding: 15px 10px; font-size: 1rem; color: #4a4a4a; }
         .calendar-table .sun { color: #c46b6b; } 
-        .highlight { 
-            display: inline-block; width: 30px; height: 30px; line-height: 30px; 
-            background-color: #b89c7d; color: white !important; border-radius: 50%; font-weight: 700; 
-        }
+        .highlight { display: inline-block; width: 30px; height: 30px; line-height: 30px; background-color: #b89c7d; color: white !important; border-radius: 50%; font-weight: 700; }
         .d-day-container { margin-top: 50px; padding: 30px 10px; border-top: 1px solid #dddcd8; border-bottom: 1px solid #dddcd8; }
         .d-day-text { font-size: 1.1rem; color: #3a3a3a; letter-spacing: 1px; }
         .d-day-highlight { font-size: 1.25rem; color: #a68664; font-weight: 700; margin: 10px 0; display: block; }
 
-        /* 6. 오시는 길 */
+        /* 오시는 길 */
         .location { padding: 80px 20px; text-align: center; background-color: #ebe9e4; }
         .venue-info { margin-bottom: 25px; }
         .venue-name { font-size: 1.2rem; font-weight: 700; color: #2a2a2a; margin-bottom: 10px; letter-spacing: 1px; }
         .venue-address { font-size: 0.95rem; color: #5a5a5a; word-break: keep-all; }
-        .btn-copy-address {
-            margin-top: 12px; padding: 6px 16px; background-color: transparent; border: 1px solid #b89c7d; font-size: 0.8rem; color: #a68664; 
-            cursor: pointer; font-family: inherit; transition: all 0.3s;
-        }
+        .btn-copy-address { margin-top: 12px; padding: 6px 16px; background-color: transparent; border: 1px solid #b89c7d; font-size: 0.8rem; color: #a68664; cursor: pointer; font-family: inherit; transition: all 0.3s; }
         .btn-copy-address:active { background-color: #b89c7d; color: #fff; }
         .map-wrapper { width: 100%; height: 280px; margin: 20px 0; border: 1px solid #d4d1cc; }
         .map-buttons { display: flex; gap: 8px; justify-content: center; margin-top: 15px; }
-        .btn-map { 
-            display: inline-block; padding: 12px 0; width: 48%; font-size: 0.85rem; 
-            text-decoration: none; font-family: sans-serif; font-weight: 600; text-align: center;
-            border: 1px solid #d4d1cc; background-color: #fbfbfb; color: #444;
-        }
+        .btn-map { display: inline-block; padding: 12px 0; width: 48%; font-size: 0.85rem; text-decoration: none; font-family: sans-serif; font-weight: 600; text-align: center; border: 1px solid #d4d1cc; background-color: #fbfbfb; color: #444; }
 
-        /* 7. 참석 여부 전달 (RSVP) */
+        /* 참석 여부 (RSVP) */
         .rsvp-section { padding: 80px 20px; text-align: center; }
         .rsvp-desc { font-size: 0.95rem; color: #666; margin-bottom: 30px; line-height: 1.8; word-break: keep-all; }
-        .btn-rsvp-open {
-            padding: 15px 36px; background-color: #b89c7d; color: #fff; border: none;
-            border-radius: 30px; font-size: 0.95rem; font-family: inherit; font-weight: bold;
-            cursor: pointer; box-shadow: 0 4px 14px rgba(184, 156, 125, 0.35); transition: all 0.2s;
-            display: inline-flex; align-items: center; gap: 8px;
-        }
+        .btn-rsvp-open { padding: 15px 36px; background-color: #b89c7d; color: #fff; border: none; border-radius: 30px; font-size: 0.95rem; font-family: inherit; font-weight: bold; cursor: pointer; box-shadow: 0 4px 14px rgba(184, 156, 125, 0.35); transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
         .btn-rsvp-open:active { background-color: #a68664; transform: scale(0.98); }
-
-        .rsvp-modal-content {
-            background-color: #fff; width: 88%; max-width: 380px; padding: 30px 20px;
-            border-radius: 12px; position: relative; text-align: left;
-        }
+        .rsvp-modal-content { background-color: #fff; width: 88%; max-width: 380px; padding: 30px 20px; border-radius: 12px; position: relative; text-align: left; }
         .rsvp-modal-title { font-size: 1.15rem; color: #222; text-align: center; margin-bottom: 22px; font-weight: 700; }
         .form-group { margin-bottom: 18px; }
         .form-label { font-size: 0.9rem; color: #444; font-weight: 700; margin-bottom: 8px; display: block; }
         .radio-group { display: flex; gap: 15px; }
         .radio-label { font-size: 0.9rem; color: #555; display: flex; align-items: center; gap: 6px; cursor: pointer; }
-        .rsvp-input, .rsvp-select {
-            width: 100%; padding: 12px; border: 1px solid #d4d1cc; border-radius: 4px;
-            font-family: inherit; font-size: 0.9rem; outline: none; background: #fafafa;
-        }
-        .btn-rsvp-submit {
-            width: 100%; padding: 14px; background-color: #b89c7d; color: #fff; border: none;
-            border-radius: 4px; font-family: inherit; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 10px;
-        }
+        .rsvp-input, .rsvp-select { width: 100%; padding: 12px; border: 1px solid #d4d1cc; border-radius: 4px; font-family: inherit; font-size: 0.9rem; outline: none; background: #fafafa; }
+        .btn-rsvp-submit { width: 100%; padding: 14px; background-color: #b89c7d; color: #fff; border: none; border-radius: 4px; font-family: inherit; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 10px; }
         .btn-rsvp-submit:active { background-color: #a68664; }
 
-        /* 8. 계좌번호 */
+        /* 계좌번호 */
         .account-section { padding: 80px 20px; text-align: center; background-color: #ebe9e4; }
         .account-desc { font-size: 0.95rem; color: #666; margin-bottom: 30px; line-height: 1.8; }
         .accordion-wrapper { max-width: 360px; margin: 0 auto; text-align: left; }
         .accordion { margin-bottom: 15px; }
-        .accordion-btn {
-            width: 100%; padding: 16px 20px; background-color: #fff; border: 1px solid #d4d1cc; border-radius: 4px;
-            font-size: 1rem; color: #2a2a2a; font-family: inherit; font-weight: 700; cursor: pointer;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .accordion-content {
-            display: none; padding: 15px 20px; background-color: #fff;
-            border: 1px solid #d4d1cc; border-top: none; border-radius: 0 0 4px 4px;
-        }
+        .accordion-btn { width: 100%; padding: 16px 20px; background-color: #fff; border: 1px solid #d4d1cc; border-radius: 4px; font-size: 1rem; color: #2a2a2a; font-family: inherit; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .accordion-content { display: none; padding: 15px 20px; background-color: #fff; border: 1px solid #d4d1cc; border-top: none; border-radius: 0 0 4px 4px; }
         .accordion-content.show { display: block; }
         .account-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed #ddd; }
         .account-item:last-child { border-bottom: none; }
         .account-info { display: flex; flex-direction: column; gap: 4px; }
         .bank-details { font-size: 0.95rem; color: #333; font-weight: 700; font-family: sans-serif; }
         .account-holder { font-size: 0.85rem; color: #777; }
-        .btn-copy-acc {
-            padding: 6px 12px; background-color: #fcfcfc; border: 1px solid #b89c7d; border-radius: 4px;
-            font-size: 0.8rem; color: #a68664; font-family: inherit; cursor: pointer; white-space: nowrap;
-        }
+        .btn-copy-acc { padding: 6px 12px; background-color: #fcfcfc; border: 1px solid #b89c7d; border-radius: 4px; font-size: 0.8rem; color: #a68664; font-family: inherit; cursor: pointer; white-space: nowrap; }
 
-        /* 9. 방명록 */
+        /* 방명록 */
         .guestbook-section { padding: 80px 20px; text-align: center; }
         .guestbook-form { max-width: 360px; margin: 0 auto 30px; text-align: left; }
         .input-group { display: flex; gap: 10px; margin-bottom: 10px; }
@@ -229,33 +207,23 @@
         .guest-text { font-size: 0.95rem; color: #555; white-space: pre-wrap; word-break: break-all; line-height: 1.6; }
         .btn-delete { position: absolute; top: 15px; right: 15px; background: none; border: none; color: #ccc; cursor: pointer; font-size: 1.2rem; }
 
-        /* 10. 공유하기 & 푸터 */
+        /* 공유하기 & 푸터 */
         .share-section { padding: 60px 20px; text-align: center; background-color: #ebe9e4; }
         .share-buttons { display: flex; gap: 12px; justify-content: center; max-width: 360px; margin: 0 auto; }
-        .btn-share {
-            flex: 1; padding: 14px 0; border-radius: 6px; border: none;
-            font-size: 0.9rem; font-family: inherit; font-weight: bold; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
+        .btn-share { flex: 1; padding: 14px 0; border-radius: 6px; border: none; font-size: 0.9rem; font-family: inherit; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-share-kakao { background-color: #FEE500; color: #191919; }
         .btn-share-link { background-color: #fff; border: 1px solid #d4d1cc; color: #444; }
         .footer-copyright { margin-top: 40px; font-size: 0.75rem; color: #888; letter-spacing: 1px; }
 
         /* 모달 공통 */
-        .modal {
-            display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.85); flex-direction: column; align-items: center; justify-content: center;
-        }
+        .modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); flex-direction: column; align-items: center; justify-content: center; }
         .modal-content { max-width: 100%; max-height: 80vh; object-fit: contain; }
         .modal-close { position: absolute; top: 20px; right: 25px; color: #fff; font-size: 35px; cursor: pointer; }
         .modal-prev, .modal-next { position: absolute; top: 50%; transform: translateY(-50%); color: #fff; font-size: 30px; padding: 15px; cursor: pointer; }
         .modal-prev { left: 10px; } .modal-next { right: 10px; }
 
         /* 연락하기 모달 */
-        .contact-modal-content {
-            background-color: #fff; width: 88%; max-width: 380px; padding: 30px 20px;
-            border-radius: 12px; position: relative; text-align: center;
-        }
+        .contact-modal-content { background-color: #fff; width: 88%; max-width: 380px; padding: 30px 20px; border-radius: 12px; position: relative; text-align: center; }
         .contact-modal-title { font-size: 1.1rem; color: #222; margin-bottom: 25px; font-weight: 700; }
         .contact-group { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
         .contact-group:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
@@ -263,26 +231,32 @@
         .contact-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; }
         .contact-person { font-size: 1rem; font-weight: 700; color: #333; }
         .contact-actions { display: flex; gap: 12px; }
-        .contact-action-btn {
-            width: 36px; height: 36px; border-radius: 50%; background-color: #f4f3f0;
-            display: flex; align-items: center; justify-content: center; text-decoration: none; color: #b89c7d;
-        }
+        .contact-action-btn { width: 36px; height: 36px; border-radius: 50%; background-color: #f4f3f0; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #b89c7d; }
 
         /* 토스트 알림 */
-        .toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background-color: rgba(50, 50, 50, 0.88); color: #fff; padding: 12px 24px;
-            border-radius: 25px; font-size: 0.85rem; z-index: 10000; opacity: 0;
-            transition: opacity 0.3s; pointer-events: none; white-space: nowrap;
-        }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background-color: rgba(50, 50, 50, 0.88); color: #fff; padding: 12px 24px; border-radius: 25px; font-size: 0.85rem; z-index: 10000; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
         .toast.show { opacity: 1; }
     </style>
 </head>
 <body>
 
-<!-- BGM 오디오 & 컨트롤 버튼 (깃허브 업로드 bgm.mp3 연결) -->
+<!-- 오프닝 봉투 애니메이션 -->
+<div id="envelopeOverlay" onclick="openInvitation()">
+    <div class="env-wrapper" id="envWrapper">
+        <div class="env-back"></div>
+        <div class="env-letter">
+            <h3>동재 ♥ 혜령</h3>
+            <p>초대합니다</p>
+        </div>
+        <div class="env-front"></div>
+        <div class="env-flap"></div>
+    </div>
+    <div class="env-guide">봉투를 터치하여 열어주세요</div>
+</div>
+
+<!-- BGM 오디오 & 컨트롤 버튼 -->
 <audio id="bgmAudio" loop preload="auto">
-    <source src="wedding_bgm.mp3" type="audio/mpeg">
+    <source src="bgm.mp3" type="audio/mpeg">
 </audio>
 <div class="bgm-btn" id="bgmBtn" onclick="toggleBgm()" title="배경음악 재생/일시정지">
     <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
@@ -336,15 +310,17 @@
         </button>
     </section>
 
-    <!-- 갤러리 -->
+    <!-- 갤러리 (가로 스와이프) -->
     <section class="gallery fade-wrap" id="gallerySection">
         <h2 class="section-title">우리의 순간들</h2>
         <p class="section-subtitle">
             <svg class="sub-icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
             GALLERY
         </p>
-        <div class="gallery-grid" id="galleryGrid"></div>
-        <button id="btnMore" class="btn-more" onclick="togglePhotos()">사진 더보기</button>
+        <div class="gallery-wrapper" id="gallerySlider">
+            <!-- JS에서 이미지 15장이 삽입됩니다 -->
+        </div>
+        <p style="font-size:0.8rem; color:#888; margin-top:10px; text-align:center;">사진을 좌우로 넘겨보세요</p>
     </section>
 
     <!-- 달력 및 D-Day -->
@@ -363,26 +339,14 @@
         
         <table class="calendar-table">
             <thead>
-                <tr>
-                    <th class="sun">일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
-                </tr>
+                <tr><th class="sun">일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="sun"></td><td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td>
-                </tr>
-                <tr>
-                    <td class="sun"><span class="highlight">5</span></td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td>
-                </tr>
-                <tr>
-                    <td class="sun">12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td>
-                </tr>
-                <tr>
-                    <td class="sun">19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td>
-                </tr>
-                <tr>
-                    <td class="sun">26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td></td>
-                </tr>
+                <tr><td class="sun"></td><td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+                <tr><td class="sun"><span class="highlight">5</span></td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td></tr>
+                <tr><td class="sun">12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td></tr>
+                <tr><td class="sun">19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td></tr>
+                <tr><td class="sun">26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td></td></tr>
             </tbody>
         </table>
 
@@ -633,6 +597,34 @@
 <div id="toast" class="toast"></div>
 
 <script>
+    // --- 1. 봉투 열기 애니메이션 & 음악 재생 ---
+    let isEnvelopeOpened = false;
+    let isBgmPlaying = false;
+    const bgmAudio = document.getElementById('bgmAudio');
+    const bgmBtn = document.getElementById('bgmBtn');
+
+    function openInvitation() {
+        if (isEnvelopeOpened) return;
+        isEnvelopeOpened = true;
+        
+        document.getElementById('envWrapper').classList.add('open');
+        document.querySelector('.env-guide').style.display = 'none';
+
+        // 봉투 터치 시 음악 재생
+        if (bgmAudio && bgmAudio.paused) {
+            bgmAudio.play().then(() => {
+                bgmBtn.classList.add('playing');
+                isBgmPlaying = true;
+            }).catch(e => console.log("BGM 자동 재생 차단됨:", e));
+        }
+
+        setTimeout(() => {
+            const overlay = document.getElementById('envelopeOverlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.display = 'none'; }, 1000);
+        }, 1500);
+    }
+
     // --- 토스트 알림 ---
     function showToast(msg) {
         const toast = document.getElementById('toast');
@@ -642,10 +634,6 @@
     }
 
     // --- BGM 제어 ---
-    let isBgmPlaying = false;
-    const bgmAudio = document.getElementById('bgmAudio');
-    const bgmBtn = document.getElementById('bgmBtn');
-
     function toggleBgm() {
         if (isBgmPlaying) {
             bgmAudio.pause();
@@ -670,12 +658,8 @@
     fadeElements.forEach(el => observer.observe(el));
 
     // --- 연락하기 모달 ---
-    function openContactModal() {
-        document.getElementById('contactModal').style.display = 'flex';
-    }
-    function closeContactModal(e) {
-        document.getElementById('contactModal').style.display = 'none';
-    }
+    function openContactModal() { document.getElementById('contactModal').style.display = 'flex'; }
+    function closeContactModal(e) { document.getElementById('contactModal').style.display = 'none'; }
 
     // --- RSVP 팝업 모달 함수 ---
     function openRsvpModal() {
@@ -686,7 +670,6 @@
         document.getElementById('rsvpModal').style.display = 'none';
         document.body.style.overflow = 'auto';
     }
-
     function submitRsvp(e) {
         e.preventDefault();
         const name = document.getElementById('rsvpName').value.trim();
@@ -704,20 +687,14 @@
             textArea.value = text;
             document.body.appendChild(textArea);
             textArea.select();
-            try {
-                document.execCommand('copy');
-                showToast(successMsg);
-            } catch (err) {
-                showToast("복사에 실패했습니다. 직접 복사해주세요.");
-            }
+            try { document.execCommand('copy'); showToast(successMsg); } 
+            catch (err) { showToast("복사에 실패했습니다. 직접 복사해주세요."); }
             document.body.removeChild(textArea);
         }
     }
-
     function copyAddress() { copyText("서울특별시 강남구 언주로 508", "주소가 복사되었습니다."); }
     function copyAccount(acc) { copyText(acc, "계좌번호가 복사되었습니다."); }
     function copyLink() { copyText(window.location.href, "청첩장 링크가 복사되었습니다."); }
-
     function shareKakao() {
         if (navigator.share) {
             navigator.share({
@@ -725,9 +702,7 @@
                 text: '2027년 12월 5일 일요일 2:40PM 상록아트홀',
                 url: window.location.href
             }).catch(console.error);
-        } else {
-            copyLink();
-        }
+        } else { copyLink(); }
     }
 
     // --- D-Day 실시간 카운트다운 ---
@@ -735,26 +710,21 @@
         const weddingDate = new Date(2027, 11, 5, 14, 40, 0).getTime(); 
         const now = new Date().getTime();
         const distance = weddingDate - now;
-
         if (distance < 0) {
             document.querySelector(".d-day-container").innerHTML = "<p class='d-day-text'>동재, 혜령의 결혼식이 <span class='d-day-highlight'>오늘</span>입니다.</p>";
             return;
         }
-
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
         document.getElementById("ddayCount").innerText = `${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
     }
     updateDday();
     setInterval(updateDday, 1000);
 
     // --- 계좌번호 아코디언 ---
-    function toggleAccordion(id) {
-        document.getElementById(id).classList.toggle('show');
-    }
+    function toggleAccordion(id) { document.getElementById(id).classList.toggle('show'); }
 
     // --- 방명록 로직 ---
     let messages = [];
@@ -783,12 +753,12 @@
         const nameInput = document.getElementById('guestName');
         const pwdInput = document.getElementById('guestPwd');
         const msgInput = document.getElementById('guestMsg');
-
         const name = nameInput.value.trim();
         const pwd = pwdInput.value.trim();
         const text = msgInput.value.trim();
 
-        if(!name || !pwd || !text) return alert('이름, 비밀번호, 메시지를 모두 입력해주세요.');
+        // alert 대신 자체 showToast 기능 사용
+        if(!name || !pwd || !text) return showToast('이름, 비밀번호, 메시지를 모두 입력해주세요.');
 
         const today = new Date();
         const dateString = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
@@ -804,19 +774,19 @@
     function deleteMessage(index) {
         const inputPwd = prompt('작성 시 입력한 비밀번호를 입력해주세요.');
         if (inputPwd === null) return; 
-
         if (inputPwd === messages[index].pwd) {
             messages.splice(index, 1);
             try { localStorage.setItem('wedding_guestbook', JSON.stringify(messages)); } catch (e) {}
             renderMessages();
             showToast('삭제되었습니다.');
-        } else {
-            alert('비밀번호가 일치하지 않습니다.');
+        } else { 
+            // alert 대신 자체 showToast 기능 사용
+            showToast('비밀번호가 일치하지 않습니다.'); 
         }
     }
     renderMessages();
 
-    // --- 갤러리 로직 (총 15장) ---
+    // --- 2 & 3. 가로 스와이프 갤러리 및 자동 슬라이드 로직 ---
     const images = [
         "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80",
         "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80",
@@ -835,34 +805,38 @@
         "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=600&q=80"
     ];
 
-    const galleryGrid = document.getElementById('galleryGrid');
+    const gallerySlider = document.getElementById('gallerySlider');
     const modal = document.getElementById('photoModal');
     const modalImage = document.getElementById('modalImage');
-    const btnMore = document.getElementById('btnMore');
     let currentIndex = 0;
-    let isExpanded = false; 
+    let autoSlideInterval;
 
     images.forEach((src, index) => {
         const img = document.createElement('img');
         img.src = src;
         img.className = 'gallery-item';
-        if (index >= 6) img.classList.add('hidden-item');
         img.onclick = () => openModal(index);
-        galleryGrid.appendChild(img);
+        if(gallerySlider) gallerySlider.appendChild(img);
     });
 
-    function togglePhotos() {
-        const allItems = document.querySelectorAll('.gallery-item');
-        if (!isExpanded) {
-            allItems.forEach((item, index) => { if (index >= 6) item.classList.remove('hidden-item'); });
-            btnMore.innerHTML = '사진 접기';
-            isExpanded = true;
-        } else {
-            allItems.forEach((item, index) => { if (index >= 6) item.classList.add('hidden-item'); });
-            btnMore.innerHTML = '사진 더보기';
-            isExpanded = false;
-            document.getElementById('gallerySection').scrollIntoView({ behavior: 'smooth' });
-        }
+    function startAutoSlide() {
+        autoSlideInterval = setInterval(() => {
+            if (!gallerySlider) return;
+            const scrollPos = gallerySlider.scrollLeft;
+            const itemWidth = gallerySlider.clientWidth * 0.8 + 15; 
+            
+            if (scrollPos + gallerySlider.clientWidth >= gallerySlider.scrollWidth - 10) {
+                gallerySlider.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                gallerySlider.scrollTo({ left: scrollPos + itemWidth, behavior: 'smooth' });
+            }
+        }, 3000);
+    }
+
+    if (gallerySlider) {
+        gallerySlider.addEventListener('touchstart', () => clearInterval(autoSlideInterval));
+        gallerySlider.addEventListener('touchend', () => { setTimeout(startAutoSlide, 2000); });
+        startAutoSlide();
     }
 
     function openModal(index) {
@@ -870,11 +844,13 @@
         modalImage.src = images[currentIndex];
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden'; 
+        clearInterval(autoSlideInterval);
     }
 
     function closeModal() {
         modal.style.display = 'none';
         document.body.style.overflow = 'auto'; 
+        startAutoSlide();
     }
 
     function changeSlide(direction) {
@@ -882,35 +858,15 @@
         modalImage.src = images[currentIndex];
     }
 
+    // 갤러리 모달 스와이프 기능
     let touchstartX = 0;
     let touchendX = 0;
-
     modal.addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; });
     modal.addEventListener('touchend', e => {
         touchendX = e.changedTouches[0].screenX;
         if (touchendX < touchstartX - 40) changeSlide(1);  
         if (touchendX > touchstartX + 40) changeSlide(-1); 
     });
-
-    // --- 하객의 첫 터치/스크롤 시 BGM 감지 및 자동 재생 ---
-    function initAutoplay() {
-        function startMusic() {
-            if (bgmAudio && bgmAudio.paused) {
-                bgmAudio.play().then(() => {
-                    bgmBtn.classList.add('playing');
-                    isBgmPlaying = true;
-                }).catch(e => console.log("자동 재생 정책으로 차단됨:", e));
-            }
-            window.removeEventListener('click', startMusic);
-            window.removeEventListener('touchstart', startMusic);
-            window.removeEventListener('scroll', startMusic);
-        }
-
-        window.addEventListener('click', startMusic);
-        window.addEventListener('touchstart', startMusic);
-        window.addEventListener('scroll', startMusic);
-    }
-    document.addEventListener('DOMContentLoaded', initAutoplay);
 </script>
 
 </body>
